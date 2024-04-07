@@ -4,6 +4,7 @@ import './App.css';
 import RemindersList from './components/RemindersList';
 import Reminder from './interfaces/Reminder'
 import reminderService from './services/reminder'
+import NewReminder from './components/NewReminder';
 
 function App() {
 
@@ -18,9 +19,20 @@ function App() {
   const reminders=await reminderService.getReminders();
   setReminders(reminders);
   }
+  const removeReminder =(id:number)=>{
+
+    setReminders(reminders.filter(reminder => reminder.id !== id))
+  }
+  const addReminder = async(title:string)=>{
+    console.log(title);
+    
+   const newReminder= await reminderService.addReminder(title)
+   setReminders([newReminder,...reminders])
+  }
   return (
     <div className="App">
-    <RemindersList items={reminders}/>
+      <NewReminder onAddReminder = {addReminder}/>
+    <RemindersList items={reminders} onRemoveReminder={removeReminder}/>
     </div>
   );
 }
